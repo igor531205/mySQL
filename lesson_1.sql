@@ -74,12 +74,10 @@ OR manufacturer LIKE @finde;
 SET @finde = '[0-9]';
 SELECT product_name, manufacturer, product_count, price 
 FROM mobile_phones
-WHERE product_name REGEXP @finde
-OR manufacturer REGEXP @finde;
+WHERE product_name REGEXP @finde;
 
 -- 4.4. Вывод товаров, в которых есть ЦИФРА "8"
 SET @finde = '[8]';
 SELECT product_name, manufacturer, product_count, price 
 FROM mobile_phones
-WHERE product_name REGEXP @finde
-OR manufacturer REGEXP @finde;
+WHERE product_name REGEXP @finde;
