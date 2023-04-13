@@ -10,11 +10,11 @@ USE lesson_1;
 
 -- создание таблицы
 CREATE TABLE mobile_phones(
-	id INT AUTO_INCREMENT NOT NULL PRIMARY KEY, 
-	product_name VARCHAR(45) NOT NULL, 
-	manufacturer VARCHAR(45) NOT NULL,
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY, 
+    product_name VARCHAR(45) NOT NULL, 
+    manufacturer VARCHAR(45) NOT NULL,
     product_count SMALLINT UNSIGNED NOT NULL DEFAULT 0,
-	price DECIMAL(10,0) NOT NULL DEFAULT 0
+    price DECIMAL(10,0) NOT NULL DEFAULT 0
 );
 
 -- наполнение таблицы
@@ -50,10 +50,10 @@ WHERE manufacturer = @display;
 
 /* Задача 4
 * С помощью регулярных выражений найти:
-	4.1. Товары, в которых есть упоминание "Iphone"
-	4.2. Товары, в которых есть упоминание "Samsung"
-	4.3. Товары, в которых есть ЦИФРЫ
-	4.4. Товары, в которых есть ЦИФРА "8"
+    4.1. Товары, в которых есть упоминание "Iphone"
+    4.2. Товары, в которых есть упоминание "Samsung"
+    4.3. Товары, в которых есть ЦИФРЫ
+    4.4. Товары, в которых есть ЦИФРА "8"
 */
 
 -- 4.1. Вывод товаров, в которых есть упоминание "Iphone"
