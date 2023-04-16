@@ -86,5 +86,5 @@ SELECT
         WHEN @state_closed THEN 'Заказ закрыт'
         WHEN @state_cancelled THEN 'Заказ отменен'
         ELSE 'Неизвестное состояние'
-    END AS 'Статус'	
+    END AS 'Статус'
 FROM orders;
