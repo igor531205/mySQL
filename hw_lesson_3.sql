@@ -1,9 +1,9 @@
--- создаём базу данных для 3 семинара
+-- создание базы данных для 3 семинара
 DROP DATABASE IF EXISTS lesson_3;
 CREATE DATABASE lesson_3;
 USE lesson_3;
 
--- Персонал
+-- Создание таблицы Персонал
 DROP TABLE IF EXISTS staff;
 CREATE TABLE staff (
 	id INT AUTO_INCREMENT PRIMARY KEY, 
@@ -15,7 +15,7 @@ CREATE TABLE staff (
 	age INT
 );
 
--- Наполнение данными
+-- Наполнение таблицы данными
 INSERT INTO staff (firstname, lastname, post, seniority, salary, age)
 VALUES
 	('Вася', 'Петров', 'Начальник', '40', 100000, 60),
