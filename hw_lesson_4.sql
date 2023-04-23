@@ -296,7 +296,8 @@ SET @user_id = 1;
 SELECT CONCAT(u.firstname, ' ', u.lastname) AS user_name	
 FROM users u
 JOIN messages m ON m.from_user_id = u.id
-JOIN (SELECT 
+JOIN (
+    SELECT 
         initiator_user_id AS user_id,
         target_user_id AS friend_id
     FROM friend_requests 
@@ -307,8 +308,8 @@ JOIN (SELECT
         initiator_user_id AS friend_id
     FROM friend_requests 
     WHERE `status` = 'approved'
-    ORDER BY user_id) AS f
-    ON f.friend_id = u.id
+    ORDER BY user_id
+) AS f ON f.friend_id = u.id
 WHERE m.to_user_id = @user_id AND f.user_id = @user_id
 GROUP BY m.from_user_id
 ORDER BY COUNT(user_name) DESC 
