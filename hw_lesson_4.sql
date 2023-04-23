@@ -220,7 +220,98 @@ INSERT INTO `profiles` (user_id, gender, birthday, photo_id, hometown) VALUES
 (9, 'f', '1982-11-01', 9, 'Loweborough'),
 (10, 'm', '1977-05-14', NULL, 'New Nellaside'); 
 
+-- /--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/ --
+/* Задача 1
+Подсчитать общее количество лайков, которые получили пользователи младше 12 лет.
+*/
+SET @age_view = 12;
+SELECT 
+	COUNT(l.id) AS cnt_like
+FROM likes l
+JOIN media m ON m.id = l.media_id
+JOIN users u ON u.id = m.user_id
+JOIN `profiles` p ON p.user_id = u.id
+WHERE p.birthday > DATE_SUB(CURRENT_DATE(), INTERVAL @age_view YEAR)
+ORDER BY cnt_like;
 
+-- /--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/ --
+/* Задача 2
+Определить кто больше поставил лайков (всего): мужчины или женщины.
+*/
+SET @female_gender = 'f',
+	@male_gender = 'm',
+    @first_view = 1;
+PREPARE STMT FROM "
+	SELECT 
+		CASE p.gender
+			WHEN ? THEN 'Женщины'
+			WHEN ? THEN 'Мужчины'        
+			ELSE 'Неизвестный пол'
+		END AS `winner`
+	FROM likes l
+	JOIN users u ON u.id = l.user_id
+	JOIN `profiles` p ON p.user_id = u.id
+	GROUP BY p.gender
+	ORDER BY COUNT(l.id) DESC 
+	LIMIT ?";
+EXECUTE STMT 
+USING @female_gender, @male_gender, 
+	@first_view;
+
+-- /--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/ --
+/* Задача 3
+Вывести всех пользователей, которые не отправляли сообщения.
+*/
+SELECT CONCAT(u.firstname, ' ', u.lastname) AS user_name
+FROM users u
+LEFT JOIN messages m ON m.from_user_id = u.id
+WHERE m.from_user_id IS NULL
+ORDER BY user_name;
+
+-- /--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/ --
+/* Задача 4
+Пусть задан некоторый пользователь. Из всех друзей этого пользователя найдите человека, 
+который больше всех написал ему сообщений.
+*/
+
+-- вывод человека написавшему больше всех сообщений пользователю с id = @user_id
+-- решение через JOIN
+SET @user_id = 1;
+SELECT CONCAT(u.firstname, ' ', u.lastname) AS user_name	
+FROM users u
+JOIN messages m ON m.from_user_id = u.id
+JOIN friend_requests f 
+	ON	f.initiator_user_id = u.id 
+    OR  f.target_user_id = u.id
+WHERE f.`status` = 'approved' AND m.to_user_id = @user_id
+AND (f.initiator_user_id = @user_id OR f.target_user_id = @user_id)
+GROUP BY m.from_user_id
+ORDER BY COUNT(user_name) DESC 
+LIMIT 1;
+
+-- вывод человека написавшему больше всех сообщений пользователю с id = @user_id
+-- альтернативное решение через UNION
+SET @user_id = 1;
+SELECT CONCAT(u.firstname, ' ', u.lastname) AS user_name	
+FROM users u
+JOIN messages m ON m.from_user_id = u.id
+JOIN (SELECT 
+		initiator_user_id AS user_id,
+		target_user_id AS friend_id
+	FROM friend_requests 
+	WHERE `status` = 'approved'
+	UNION
+	SELECT 
+		target_user_id AS user_id,
+		initiator_user_id AS friend_id
+	FROM friend_requests 
+	WHERE `status` = 'approved'
+	ORDER BY user_id) AS f
+    ON f.friend_id = u.id
+WHERE m.to_user_id = @user_id AND f.user_id = @user_id
+GROUP BY m.from_user_id
+ORDER BY COUNT(user_name) DESC 
+LIMIT 1;   
 
 
 
