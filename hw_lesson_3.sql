@@ -66,7 +66,7 @@ SELECT post, SUM(salary) FROM staff GROUP BY post;
 
 -- вывод кол-ва сотрудников с специальностью (post) «Рабочий» 
 -- в возрасте от 24 до 49 лет включительно.
-SET @post_name_view = 'Уборщик',
+SET @post_name_view = 'Рабочий',
     @age_min_view = 24, 
     @age_max_view = 49;
 SELECT COUNT(post) AS cnt_staff FROM staff
@@ -84,6 +84,11 @@ FROM (
     FROM staff 
     GROUP BY post
 ) AS cnt_staff;
+
+-- вывод кол-ва специальностей.
+-- альтернативное решение (удаление дубликатов).    
+SELECT COUNT(DISTINCT post) AS cnt_post
+FROM staff;
 
 /* Задача 6
 Выведите специальности, у которых средний возраст сотрудников меньше 30 лет.
