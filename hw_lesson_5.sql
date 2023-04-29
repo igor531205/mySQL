@@ -261,7 +261,7 @@ FROM (
         CONCAT(u.firstname, ' ', u.lastname) AS username,
         COUNT(m.id) AS cnt_messages
     FROM users u
-    JOIN messages m ON u.id = m.from_user_id
+    LEFT JOIN messages m ON u.id = m.from_user_id
     GROUP BY username) AS tab;
 
 -- /--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/--/ --
